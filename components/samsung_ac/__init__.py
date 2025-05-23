@@ -1,5 +1,6 @@
 import esphome.codegen as cg
 import esphome.config_validation as cv
+from esphome import pins
 from esphome.components import uart, sensor, switch, select, number, climate
 from esphome.const import (
     CONF_ID,
@@ -21,6 +22,7 @@ from esphome.const import (
     CONF_FILTERS,
 )
 from esphome.core import CORE, Lambda
+from esphome.cpp_helpers import gpio_pin_expression
 
 CODEOWNERS = ["matthias882", "lanwin", "omerfaruk-aran"]
 DEPENDENCIES = ["uart"]
@@ -80,6 +82,8 @@ CONF_DEVICE_OUT_CONTROL_WATTMETER_ALL_UNIT_ACCUM = "outdoor_instantaneous_power"
 CONF_DEVICE_OUT_CONTROL_WATTMETER_1W_1MIN_SUM = "outdoor_cumulative_energy"
 CONF_DEVICE_OUT_SENSOR_CT1 = "outdoor_current"
 CONF_DEVICE_OUT_SENSOR_VOLTAGE = "outdoor_voltage"
+CONF_FLOW_CONTROL_PIN_1 = "flow_control_pin_1"
+CONF_FLOW_CONTROL_PIN_2 = "flow_control_pin_2"
 
 
 CONF_CAPABILITIES = "capabilities"
@@ -336,6 +340,8 @@ CONFIG_SCHEMA = (
             cv.Optional(CONF_DEBUG_LOG_UNDEFINED_MESSAGES, default=False): cv.boolean,
             cv.Optional(CONF_CAPABILITIES): CAPABILITIES_SCHEMA,
             cv.Required(CONF_DEVICES): cv.ensure_list(DEVICE_SCHEMA),
+            cv.Optional(CONF_FLOW_CONTROL_PIN_1): pins.gpio_output_pin_schema,
+            cv.Optional(CONF_FLOW_CONTROL_PIN_2): pins.gpio_output_pin_schema,
         }
     )
     .extend(uart.UART_DEVICE_SCHEMA)
@@ -582,6 +588,13 @@ async def to_code(config):
     for key, method in config_actions.items():
         if key in config:
             cg.add(method(config[key]))
+
+    if CONF_FLOW_CONTROL_PIN_1 in config:
+        pin = await gpio_pin_expression(config[CONF_FLOW_CONTROL_PIN_1])
+        cg.add(var.set_flow_control_pin_1(pin))
+    if CONF_FLOW_CONTROL_PIN_2 in config:
+        pin = await gpio_pin_expression(config[CONF_FLOW_CONTROL_PIN_2])
+        cg.add(var.set_flow_control_pin_2(pin))
 
     await cg.register_component(var, config)
     await uart.register_uart_device(var, config)

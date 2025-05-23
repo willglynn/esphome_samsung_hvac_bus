@@ -218,6 +218,9 @@ namespace esphome
         update_device_sensor(address, &Samsung_AC_Device::outdoor_voltage, value);
       }
 
+      void set_flow_control_pin_1(GPIOPin *flow_control_pin) { this->flow_control_pin_1 = flow_control_pin_1; }
+      void set_flow_control_pin_2(GPIOPin *flow_control_pin) { this->flow_control_pin_2 = flow_control_pin_2; }
+
     protected:
       Samsung_AC_Device *find_device(const std::string &address)
       {
@@ -244,6 +247,9 @@ namespace esphome
       uint16_t debug_mqtt_port = 1883;
       std::string debug_mqtt_username = "";
       std::string debug_mqtt_password = "";
+
+      GPIOPin *flow_control_pin_1 = nullptr;
+      GPIOPin *flow_control_pin_2 = nullptr;
     };
 
   } // namespace samsung_ac

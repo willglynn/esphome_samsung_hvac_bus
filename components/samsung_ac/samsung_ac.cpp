@@ -14,6 +14,12 @@ namespace esphome
       {
         ESP_LOGW(TAG, "setup");
       }
+      if (flow_control_pin_1) {
+        flow_control_pin_1->setup();
+      }
+      if (flow_control_pin_2) {
+        flow_control_pin_2->setup();
+      }
     }
 
     void Samsung_AC::update()
@@ -89,8 +95,19 @@ namespace esphome
     void Samsung_AC::publish_data(std::vector<uint8_t> &data)
     {
       ESP_LOGW(TAG, "write %s", bytes_to_hex(data).c_str());
+
+      if (flow_control_pin_1)
+        flow_control_pin_1->digital_write(true);
+      if (flow_control_pin_2)
+        flow_control_pin_2->digital_write(true);
+
       this->write_array(data);
       this->flush();
+
+      if (flow_control_pin_1)
+        flow_control_pin_1->digital_write(false);
+      if (flow_control_pin_2)
+        flow_control_pin_2->digital_write(false);
     }
 
     void Samsung_AC::loop()
