@@ -223,6 +223,15 @@ namespace esphome
         update_device_sensor(address, &Samsung_AC_Device::outdoor_voltage, value);
       }
 
+      void set_outdoor_running(const std::string &address, bool value)
+      {
+        Samsung_AC_Device *dev = find_device(address);
+        if (dev != nullptr && dev->outdoor_running != nullptr)
+        {
+          dev->outdoor_running->publish_state(value);
+        }
+      }
+
     protected:
       Samsung_AC_Device *find_device(const std::string &address)
       {

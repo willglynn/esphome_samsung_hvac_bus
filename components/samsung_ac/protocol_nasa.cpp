@@ -713,6 +713,16 @@ namespace esphome
                 target->set_indoor_eva_out_temperature(source, temp);
                 break;
             }
+            case MessageNumber::VAR_out_operation_status:
+            {
+                int code = static_cast<int>(message.value);
+                if (debug_log_messages)
+                {
+                    ESP_LOGW(TAG, "s:%s d:%s VAR_out_operation_status %d", source.c_str(), dest.c_str(), code);
+                }
+                target->set_outdoor_running(source, code != 0);
+                break;
+            }
             case MessageNumber::VAR_out_error_code:
             {
                 int code = static_cast<int>(message.value);

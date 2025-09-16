@@ -9,6 +9,7 @@
 #include "esphome/components/select/select.h"
 #include "esphome/components/number/number.h"
 #include "esphome/components/climate/climate.h"
+#include "esphome/components/binary_sensor/binary_sensor.h"
 #include "protocol.h"
 #include "samsung_ac.h"
 #include "conversions.h"
@@ -112,6 +113,7 @@ namespace esphome
       sensor::Sensor *outdoor_cumulative_energy{nullptr};
       sensor::Sensor *outdoor_current{nullptr};
       sensor::Sensor *outdoor_voltage{nullptr};
+      binary_sensor::BinarySensor *outdoor_running{nullptr};
       Samsung_AC_Number *target_temperature{nullptr};
       Samsung_AC_Number *water_outlet_target{nullptr};
       Samsung_AC_Number *target_water_temperature{nullptr};
@@ -173,6 +175,11 @@ namespace esphome
       void set_outdoor_temperature_sensor(sensor::Sensor *sensor)
       {
         outdoor_temperature = sensor;
+      }
+
+      void set_outdoor_running_sensor(binary_sensor::BinarySensor *sensor)
+      {
+        outdoor_running = sensor;
       }
 
       void set_indoor_eva_in_temperature_sensor(sensor::Sensor *sensor)

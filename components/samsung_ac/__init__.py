@@ -1,6 +1,6 @@
 import esphome.codegen as cg
 import esphome.config_validation as cv
-from esphome.components import uart, sensor, switch, select, number, climate
+from esphome.components import uart, sensor, switch, select, number, climate, binary_sensor
 from esphome.const import (
     CONF_ID,
     DEVICE_CLASS_TEMPERATURE,
@@ -27,7 +27,7 @@ from esphome import pins
 
 CODEOWNERS = ["matthias882", "lanwin", "omerfaruk-aran"]
 DEPENDENCIES = ["uart"]
-AUTO_LOAD = ["sensor", "switch", "select", "number", "climate"]
+AUTO_LOAD = ["sensor", "switch", "select", "number", "climate", "binary_sensor"]
 MULTI_CONF = False
 
 CONF_SAMSUNG_AC_ID = "samsung_ac_id"
@@ -81,7 +81,7 @@ CONF_DEVICE_OUT_CONTROL_WATTMETER_ALL_UNIT_ACCUM = "outdoor_instantaneous_power"
 CONF_DEVICE_OUT_CONTROL_WATTMETER_1W_1MIN_SUM = "outdoor_cumulative_energy"
 CONF_DEVICE_OUT_SENSOR_CT1 = "outdoor_current"
 CONF_DEVICE_OUT_SENSOR_VOLTAGE = "outdoor_voltage"
-
+CONF_DEVICE_OUT_SENSOR_RUNNING = "outdoor_running"
 
 CONF_CAPABILITIES = "capabilities"
 CONF_CAPABILITIES_HORIZONTAL_SWING = "horizontal_swing"
@@ -297,6 +297,7 @@ DEVICE_SCHEMA = cv.Schema(
                 cv.Optional(CONF_DEVICE_CUSTOM_MESSAGE, default=0x24FC): cv.hex_int,
             }
         ),
+        cv.Optional(CONF_DEVICE_OUT_SENSOR_RUNNING): binary_sensor.binary_sensor_schema(),
     }
 )
 
@@ -461,6 +462,10 @@ async def to_code(config):
             CONF_DEVICE_OUT_SENSOR_VOLTAGE: (
                 sensor.new_sensor,
                 var_dev.set_outdoor_voltage_sensor,
+            ),
+            CONF_DEVICE_OUT_SENSOR_RUNNING: (
+                binary_sensor.new_binary_sensor,
+                var_dev.set_outdoor_running_sensor,
             ),
         }
 

@@ -88,6 +88,7 @@ namespace esphome
             VAR_in_temp_water_heater_target_f = 0x4235,
             VAR_in_temp_eva_in_f = 0x4205,
             VAR_in_temp_eva_out_f = 0x4206,
+            VAR_out_operation_status = 0x8001,
             VAR_out_error_code = 0x8235,
             LVAR_OUT_CONTROL_WATTMETER_1W_1MIN_SUM = 0x8413,
             LVAR_OUT_CONTROL_WATTMETER_ALL_UNIT_ACCUM = 0x8414,
